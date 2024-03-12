@@ -1,0 +1,177 @@
+name: custom:com.dynatrace.extension.google-connectors
+version: 0.0.4
+minDynatraceVersion: "1.280.0"
+author:
+  name: Michael Villiger
+metrics:
+- key: cloud.gcp.connectors_googleapis_com.connection.connection_status
+  metadata:
+    unit: boolean
+    displayName: Connection Status
+- key: cloud.gcp.connectors_googleapis_com.connection.latencies
+  metadata:
+    unit: s
+    displayName: Connection request latencies
+- key: cloud.gcp.connectors_googleapis_com.connection.nodes
+  metadata: 
+    unit: Count
+    displayName: Connection node count
+- key: cloud.gcp.connectors_googleapis_com.connection.request_count
+  metadata:
+    unit: Count
+    displayName: Connection request count
+- key: cloud.gcp.connectors_googleapis_com.connection.request_sizes
+  metadata:  
+    unit: Byte
+    displayName: Connection request sizes
+- key: cloud.gcp.connectors_googleapis_com.connection.response_count
+  metadata:
+    unit: Count
+    displayName: Connection response count
+- key: cloud.gcp.connectors_googleapis_com.connection.response_sizes
+  metadata:
+    unit: Byte
+    displayName: Connection response sizes
+- key: cloud.gcp.connectors_googleapis_com.connection.state
+  metadata:
+    unit: Boolean
+    displayName: Connection state
+vars:
+- id: filter_conditions
+  displayName: Metric query filter for which metrics should be queried
+  type: "text"
+gcp:
+- service: integrationconnectors_connector
+  featureSet: default_metrics
+  dimensions:
+  - value: resource.labels.resource_container
+    key: resource_container
+  - value: resource.labels.location
+    key: location
+  - value: resource.labels.connection
+    key: connection
+  metrics:
+  - value: connectors.googleapis.com/connection/connection_status
+    key: cloud.gcp.connectors_googleapis_com.connection.connection_status
+    type: gauge
+    gcpOptions:
+      ingestDelay: 180
+      samplePeriod: 60
+      valueType: BOOL
+      metricKind: GAUGE
+      unit: ''      
+    dimensions:
+    - value: metric.labels.status
+      key: status
+  - value: connectors.googleapis.com/connection/latencies
+    key: cloud.gcp.connectors_googleapis_com.connection.latencies
+    type: gauge
+    gcpOptions:
+      ingestDelay: 120
+      samplePeriod: 60
+      valueType: DISTRIBUTION
+      metricKind: DELTA
+      unit: s      
+    dimensions:
+    - value: metric.labels.code
+      key: code
+    - value: metric.labels.service
+      key: service
+    - value: metric.labels.method
+      key: method
+  - value: connectors.googleapis.com/connection/nodes
+    key: cloud.gcp.connectors_googleapis_com.connection.nodes
+    type: gauge
+    gcpOptions:
+      ingestDelay: 120
+      samplePeriod: 60
+      valueType: INT64
+      metricKind: GAUGE
+      unit: '1'      
+    dimensions:
+    - value: metric.labels.provider
+      key: provider
+  - value: connectors.googleapis.com/connection/request_count
+    key: cloud.gcp.connectors_googleapis_com.connection.request_count
+    type: count,delta
+    gcpOptions:
+      ingestDelay: 120
+      samplePeriod: 60
+      valueType: INT64
+      metricKind: DELTA
+      unit: '1'      
+    dimensions:
+    - value: metric.labels.service
+      key: service
+    - value: metric.labels.method
+      key: method
+  - value: connectors.googleapis.com/connection/request_sizes
+    key: cloud.gcp.connectors_googleapis_com.connection.request_sizes
+    type: gauge
+    gcpOptions:
+      ingestDelay: 120
+      samplePeriod: 60
+      valueType: DISTRIBUTION
+      metricKind: DELTA
+      unit: By      
+    dimensions:
+    - value: metric.labels.service
+      key: service
+    - value: metric.labels.method
+      key: method
+    - value: metric.labels.provider
+      key: provider
+  - value: connectors.googleapis.com/connection/response_count
+    key: cloud.gcp.connectors_googleapis_com.connection.response_count
+    type: count,delta
+    gcpOptions:
+      ingestDelay: 120
+      samplePeriod: 60
+      valueType: INT64
+      metricKind: DELTA
+      unit: '1'      
+    dimensions:
+    - value: metric.labels.code
+      key: code
+    - value: metric.labels.service
+      key: service
+    - value: metric.labels.method
+      key: method
+    - value: metric.labels.connector_fault
+      key: connector_fault
+  - value: connectors.googleapis.com/connection/response_sizes
+    key: cloud.gcp.connectors_googleapis_com.connection.response_sizes
+    type: gauge
+    gcpOptions:
+      ingestDelay: 120
+      samplePeriod: 60
+      valueType: DISTRIBUTION
+      metricKind: DELTA
+      unit: By      
+    dimensions:
+    - value: metric.labels.code
+      key: code
+    - value: metric.labels.service
+      key: service
+    - value: metric.labels.method
+      key: method
+    - value: metric.labels.connector_fault
+      key: connector_fault
+    - value: metric.labels.provider
+      key: provider
+  - value: connectors.googleapis.com/connection/state
+    key: cloud.gcp.connectors_googleapis_com.connection.state
+    type: gauge
+    gcpOptions:
+      ingestDelay: 120
+      samplePeriod: 60
+      valueType: INT64
+      metricKind: GAUGE
+      unit: '1'      
+    dimensions:
+    - value: metric.labels.provider
+      key: provider
+    - value: metric.labels.connector
+      key: connector
+    - value: metric.labels.connector_version
+      key: connector_version
